@@ -1,100 +1,114 @@
 
-const calcularDiferencia = (primeraCantidad, segundaCantidad) => {
-    let diferencia = primeraCantidad - segundaCantidad;
-    return diferencia
-};
-
-function pedirPresupuesto(pregunta) {
-    const presupuesto = parseFloat(prompt(pregunta));
-    return presupuesto;
-}
-
-function mostrarResumen(nombreCliente, consultas, tipoEvento) {
-    alert(
-        "Gracias, " + nombreCliente +
-        ". Consultas realizadas para tu " + tipoEvento +
-        ": " + consultas + ".");
-}
-
-const nombreCliente = prompt("¿Cuál es tu nombre");
-const tipoEvento = prompt("¿Qué tipo de evento organizarás?");
-const precioEspejo = 3900;
-const precioCabina = 3200;
-const precioPaquete = 6500;
-
-let opcion = "";
-let precioServicio = 0;
-let servicioElegido = "";
-let consultas = 0;
-
-while (opcion !== "salir") {
-    precioServicio = 0;
-    servicioElegido = "";
-
-    const entrada = prompt("Escribe: espejo, cabina, paquete o salir");
-
-    if (entrada === null) {
-        opcion = "salir";
-    } else {
-        opcion = entrada.trim().toLowerCase();
+const calcularDiferencia = (primeraCantidad, segundaCantidad) =>
+    primeraCantidad - segundaCantidad;
+function recomendarExperiencia(opcion) {
+    if (opcion === "1") {
+        return "Espejo Mágico";
     }
 
-    switch (opcion) {
-        case "espejo":
-            servicioElegido = "Espejo Mágico";
-            precioServicio = precioEspejo;
-            break;
-
-        case "cabina":
-            servicioElegido = "Cabina 360";
-            precioServicio = precioCabina;
-            break;
-
-        case "paquete":
-            servicioElegido = "Espejo Mágico + Cabina 360";
-            precioServicio = precioPaquete;
-            break;
-
-        case "salir":
-            break;
-
-        default:
-            alert("La opción ingresada no es válida.");
+    if (opcion === "2") {
+        return "Cabina 360";
     }
 
-    if (precioServicio > 0) {
-        consultas++;
+    if (opcion === "3") {
+        return "Espejo Mágico + Cabina 360";
+    }
 
-        const presupuesto = pedirPresupuesto("¿Cuál es tu presupuesto para este servicio?");
+    return "";
+}
+function obtenerPrecioServicio(opcion) {
+    if (opcion === "1") {
+        return 3900;
+    }
 
-        if (presupuesto >= precioServicio) {
-            const restante = calcularDiferencia(presupuesto, precioServicio);
+    if (opcion === "2") {
+        return 3200;
+    }
+
+    if (opcion === "3") {
+        return 6500;
+    }
+
+    return 0;
+}
+
+
+function evaluarPresupuesto(presupuesto, precio, servicio, nombreCliente, tipoEvento) {
+
+    if (presupuesto > 0) {
+
+        if (presupuesto >= precio) {
+            const restante = calcularDiferencia(presupuesto, precio);
+
             alert(
                 "Hola " + nombreCliente +
-                ". El servicio " + servicioElegido +
-                " para tu " + tipoEvento +
-                " cuesta $" + precioServicio + " MXN." +
-                " Tu presupuesto alcanza y te quedarían $" +
-                restante + " MXN."
+                ", para tu " + tipoEvento +
+                " te recomendamos " + servicio +
+                ". Su precio es $" + precio +
+                " MXN y está dentro de tu presupuesto." +
+                " Te sobran $" + restante + " MXN."
             );
-        } else if (presupuesto > 0) {
-            const faltante = calcularDiferencia(precioServicio, presupuesto);
+
+        } else {
+            const faltante = calcularDiferencia(precio, presupuesto);
 
             alert(
-                "El servicio " + servicioElegido +
-                " cuesta $" + precioServicio + " MXN." +
-                " A tu presupuesto le faltan $" +
-                faltante + " MXN."
+                "Hola " + nombreCliente +
+                ", para tu " + tipoEvento +
+                " te recomendamos " + servicio +
+                ". Su precio es $" + precio +
+                " MXN. Te faltan $" + faltante +
+                " MXN para contratarlo."
             );
-        } else {
-            alert("Ingresa un presupuesto válido mayor a $0.");
-        }
-        const continuar = prompt("¿Quieres realizar otra consulta? Escribe si o salir");
-        if (continuar === null || continuar.trim().toLowerCase() === "salir") {
-            opcion = "salir";
         }
 
+    } else {
+        alert("Ingresa un presupuesto válido mayor a $0.");
     }
 }
 
-mostrarResumen(nombreCliente, consultas, tipoEvento);
+
+const nombreCliente = prompt("¿Cuál es tu nombre?");
+const tipoEvento = prompt("¿Qué tipo de evento organizarás?");
+
+let continuar = true;
+
+
+while (continuar) {
+    const opcion = prompt(
+        "¿Qué experiencia te interesa? Escribe el número de tu opción:\n" +
+        "1. Fotografías\n" +
+        "2. Videos\n" +
+        "3. Fotografías y videos\n" +
+        "Escribe salir para terminar."
+    );
+
+    if (opcion === null || opcion.trim().toLowerCase() === "salir") {
+        continuar = false;
+    } else {
+        const servicio = recomendarExperiencia(opcion.trim());
+        const precio = obtenerPrecioServicio(opcion.trim());
+
+        if (precio === 0) {
+            alert("Opción no válida. Intenta nuevamente.");
+        } else {
+            const respuestaPresupuesto = prompt(
+                "¿Qué presupuesto destinarías a esta experiencia?"
+            );
+
+            if (respuestaPresupuesto !== null) {
+                const presupuesto = Number(respuestaPresupuesto);
+
+                evaluarPresupuesto(presupuesto, precio, servicio, nombreCliente, tipoEvento);
+            }
+
+            const respuesta = prompt(
+                "¿Quieres consultar otra experiencia? si/no"
+            );
+
+            if (respuesta === null || respuesta.trim().toLowerCase() !== "si") {
+                continuar = false;
+            }
+        }
+    }
+}
