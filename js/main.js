@@ -68,9 +68,17 @@ function evaluarPresupuesto(presupuesto, precio, servicio, nombreCliente, tipoEv
 }
 
 
-const nombreCliente = prompt("¿Cuál es tu nombre?");
-const tipoEvento = prompt("¿Qué tipo de evento organizarás?");
+let nombreCliente = prompt("¿Cuál es tu nombre?");
 
+if (nombreCliente === null || nombreCliente.trim() === "") {
+    nombreCliente = "cliente";
+}
+
+let tipoEvento = prompt("¿Qué tipo de evento organizarás?");
+
+if (tipoEvento === null || tipoEvento.trim() === "") {
+    tipoEvento = "evento";
+}
 let continuar = true;
 
 
@@ -92,15 +100,27 @@ while (continuar) {
         if (precio === 0) {
             alert("Opción no válida. Intenta nuevamente.");
         } else {
-            const respuestaPresupuesto = prompt(
-                "¿Qué presupuesto destinarías a esta experiencia?"
-            );
 
-            if (respuestaPresupuesto !== null) {
-                const presupuesto = Number(respuestaPresupuesto);
+            let presupuesto = 0;
 
+            while (!(presupuesto > 0)) {
+                const respuesta = prompt("¿Qué presupuesto destinarías a esta experiencia?");
+
+                if (respuesta === null) {
+                    break;
+                }
+
+                presupuesto = Number(respuesta);
+
+                if (!(presupuesto > 0)) {
+                    alert("Ingresa un presupuesto válido mayor a $0.");
+                }
+            }
+
+            if (presupuesto > 0) {
                 evaluarPresupuesto(presupuesto, precio, servicio, nombreCliente, tipoEvento);
             }
+
 
             const respuesta = prompt(
                 "¿Quieres consultar otra experiencia? si/no"
