@@ -106,18 +106,16 @@ const servicios = [
     "Cabina 360",
     "Teléfono de mensajes",
     "Espejo Selfie",
-    "Paquete"
+    "Paquete Espejo + 360",
+    "Cabina de prueba"
 ];
 function administrarCatalogo() {
+    const servicioEliminado = servicios.pop();
+    console.log("Servicio retirado: " + servicioEliminado);
     servicios.push("Corazón LED");
     servicios.unshift("Cabina Inflable");
-    const servicioEliminado = servicios.pop();
-    console.log("Servicio eliminado: " + servicioEliminado);
     servicios.splice(0, 1, "Cabina de fotos inflable");
-
-    console.log("Catálogo actualizado correctamente.");
 }
-
 function listarServicios(lista) {
     let mensaje = "CATÁLOGO FESTIV\n";
     mensaje += "(Incluye servicios en desarrollo)\n\n";
